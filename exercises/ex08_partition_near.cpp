@@ -39,14 +39,11 @@ std::size_t partition_near_enemies(std::vector<Enemy>& enemies, Vec2 player, flo
     // https://en.cppreference.com/cpp/algorithm/partition
     // For the count, see https://en.cppreference.com/cpp/iterator/distance
     const float radiusSquared = radius * radius;
-    std::size_t firstFar = 0;
-    for (std::size_t i = 0; i < enemies.size(); ++i) {
-        if (distance_sq(enemies[i].position, player) <= radiusSquared) {
-            std::swap(enemies[i], enemies[firstFar]);
-            ++firstFar;
-        }
-    }
-    return firstFar;
+    auto it = std::partition(enemies.begin(), enemies.end(),
+		[player, radiusSquared](const Enemy& enemy) {
+			return distance_sq(enemy.position, player) <= radiusSquared;
+		});
+	return (std::size_t)std::distance(enemies.begin(), it);
 }
 
 TEST(PartitionNearEnemiesTest, IncludesTheBoundaryAndPreservesAllEnemies) {

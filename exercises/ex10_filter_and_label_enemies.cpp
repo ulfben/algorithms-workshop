@@ -25,12 +25,12 @@ std::vector<Enemy> select_low_hp(const std::vector<Enemy>& enemies, int threshol
     // TODO: Use std::copy_if with a lambda that captures the threshold.
     // Append the matching records to the result with std::back_inserter.
     // https://en.cppreference.com/cpp/algorithm/copy
+
     std::vector<Enemy> result;
-    for (const Enemy& enemy : enemies) {
-        if (enemy.hp < threshold) {
-            result.push_back(enemy);
-        }
-    }
+	std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(result),
+		[threshold](const Enemy& enemy) {
+			return enemy.hp < threshold;
+		});
     return result;
 }
 

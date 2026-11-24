@@ -20,12 +20,7 @@ void apply_damage(std::vector<Enemy>& enemies, int damagePerEnemy) {
     // https://en.cppreference.com/cpp/algorithm/clamp
     for (Enemy& enemy : enemies) {
         enemy.hp -= damagePerEnemy;
-        if (enemy.hp < 0) {
-            enemy.hp = 0;
-        }
-        if (enemy.hp > 100) {
-            enemy.hp = 100;
-        }
+		enemy.hp = std::clamp(enemy.hp, 0, 100);
     }
 }
 

@@ -42,30 +42,24 @@ void sort_by_distance_to_player(std::vector<Enemy>& enemies, Vec2 player) {
     // TODO: Replace the nested loops with std::sort. Use a lambda that
     // captures the player position and calls ranks_before.
     // https://en.cppreference.com/cpp/algorithm/sort
-    for (std::size_t i = 0; i + 1 < enemies.size(); ++i) {
-        for (std::size_t j = 0; j + 1 < enemies.size() - i; ++j) {
-            if (ranks_before(enemies[j + 1], enemies[j], player)) {
-                std::swap(enemies[j], enemies[j + 1]);
-            }
-        }
-    }
+	std::sort(enemies.begin(), enemies.end(), 
+        [player](const Enemy& left, const Enemy& right) {
+		    return ranks_before(left, right, player);
+		});
 }
 
 std::optional<int> closest_target_id(const std::vector<Enemy>& enemies, Vec2 player) {
     // TODO: Use std::min_element with the same ranking rule. What iterator
-    // does it return when there are no targets?
+    // does it return when there are no targets? end it
     // https://en.cppreference.com/cpp/algorithm/min_element
     // https://en.cppreference.com/cpp/utility/optional
     if (enemies.empty()) {
         return std::nullopt;
     }
-
-    auto closest = enemies.begin();
-    for (auto candidate = closest + 1; candidate != enemies.end(); ++candidate) {
-        if (ranks_before(*candidate, *closest, player)) {
-            closest = candidate;
-        }
-    }
+	auto closest = std::min_element(enemies.begin(), enemies.end(),
+		[player](const Enemy& left, const Enemy& right) {
+			return ranks_before(left, right, player);
+		});
     return closest->id;
 }
 

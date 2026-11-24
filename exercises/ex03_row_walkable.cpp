@@ -27,32 +27,20 @@ bool is_row_walkable(std::span<const TileType> row) {
     if (row.empty()) {
         return false;
     }
-    for (TileType tile : row) {
-        if (tile != TileType::Floor) {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(row.begin(), row.end(), 
+        [](TileType tile) { 
+            return tile == TileType::Floor; 
+        });
 }
 
 bool has_lava(std::span<const TileType> row) {
     // TODO: Use std::any_of. The lambda should recognise one lava tile.
-    for (TileType tile : row) {
-        if (tile == TileType::Lava) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(row.begin(), row.end(), [](TileType tile) { return tile == TileType::Lava; });
 }
 
 bool is_row_wall_free(std::span<const TileType> row) {
     // TODO: Use std::none_of. The lambda should recognise one wall tile.
-    for (TileType tile : row) {
-        if (tile == TileType::Wall) {
-            return false;
-        }
-    }
-    return true;
+    return std::none_of(row.begin(), row.end(), [](TileType tile) { return tile == TileType::Wall; });
 }
 
 TEST(MapRowTest, EmptyRowHasNoRouteLavaOrWalls) {

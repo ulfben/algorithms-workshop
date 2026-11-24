@@ -19,13 +19,8 @@ struct Enemy {
 // Both search algorithms share a reference page.
 // https://en.cppreference.com/cpp/algorithm/find
 bool is_enemy_selected(const std::vector<int>& selectedIds, int id) {
-    // TODO: Use std::find. What does it return when the ID is absent?
-    for (int selectedId : selectedIds) {
-        if (selectedId == id) {
-            return true;
-        }
-    }
-    return false;
+    // TODO: Use std::find. What does it return when the ID is absent? end it
+    return std::find(selectedIds.begin(), selectedIds.end(), id) != selectedIds.end();
 }
 
 // The result uses std::optional to represent a missing enemy.
@@ -33,10 +28,13 @@ bool is_enemy_selected(const std::vector<int>& selectedIds, int id) {
 std::optional<Enemy> find_first_dead(const std::vector<Enemy>& enemies) {
     // TODO: Use std::find_if and a lambda for the HP condition. Check for
     // end() before reading the result.
-    for (const Enemy& enemy : enemies) {
-        if (enemy.hp <= 0) {
-            return enemy;
-        }
+	auto it = std::find_if(enemies.begin(), enemies.end(), 
+        [](const Enemy& e) { 
+            return e.hp <= 0; 
+        });
+
+    if (it != enemies.end()) {
+        return *it;
     }
     return std::nullopt;
 }

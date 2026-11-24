@@ -25,11 +25,7 @@ void shuffle_deck(std::vector<Card>& deck, std::mt19937& rng) {
     // TODO: Replace the manual shuffle with std::shuffle and pass the
     // supplied random engine.
     // https://en.cppreference.com/cpp/algorithm/random_shuffle
-    for (std::size_t remaining = deck.size(); remaining > 1; --remaining) {
-        // https://en.cppreference.com/cpp/numeric/random/uniform_int_distribution
-        std::uniform_int_distribution<std::size_t> pick(0, remaining - 1);
-        std::swap(deck[remaining - 1], deck[pick(rng)]);
-    }
+	std::shuffle(deck.begin(), deck.end(), rng);
 }
 
 TEST(ShuffleDeckTest, PreservesCardCountsIncludingDuplicates) {
